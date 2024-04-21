@@ -1,5 +1,5 @@
 from ucimlrepo import fetch_ucirepo
-
+from ID3 import *
 
 mushroom = fetch_ucirepo(id=73)
 
@@ -30,3 +30,16 @@ print(breast_cancer.variables)
 # X_mush.keys() to have all the keys than I can find set of values per a key
 
 
+if __name__ == "__main__":
+
+    from ucimlrepo import fetch_ucirepo
+
+    mushroom = fetch_ucirepo(id=73)
+
+    # data
+    X_mush = mushroom.data.features
+    Y_mush = mushroom.data.targets
+
+    id3 = ID3(X_mush.shape[1], X_mush, Y_mush)
+    id3.learn()
+    # print(id3.learn())
