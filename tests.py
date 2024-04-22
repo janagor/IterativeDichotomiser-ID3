@@ -1,45 +1,97 @@
 from ucimlrepo import fetch_ucirepo
-from ID3 import *
+from ID3 import ID3
+import numpy as np
+# mushroom = fetch_ucirepo(id=73)
 
-mushroom = fetch_ucirepo(id=73)
-
-# data
-X_mush = mushroom.data.features
-Y_mush = mushroom.data.targets
-
-# metadata
-print(mushroom.metadata)
-
-# variable information
-print(mushroom.variables)
+# # data
+# X_mush = mushroom.data.features
+# Y_mush = mushroom.data.targets
 
 
-breast_cancer = fetch_ucirepo(id=14)
+# breast_cancer = fetch_ucirepo(id=14)
 
-X_bre = breast_cancer.data.features
-Y_bre = breast_cancer.data.targets
+# X_bre = breast_cancer.data.features
+# Y_bre = breast_cancer.data.targets
 
-print(breast_cancer.metadata)
+def my_test():
+    x = np.array([[1,2],[1,4],[2,2], [2,4], [2,3]])
+    y = np.array([[1],[1],[0],[0], [1]])
+    id3 = ID3(2, x, y)
+    id3.learn()
+    print(id3.predict(np.array([2,3])))
 
-print(breast_cancer.variables)
-
-
-# usefull
-# Y_mush.to_numpy() inpuy ass np.array
-# X_mush.to_numpy()
-# X_mush.keys() to have all the keys than I can find set of values per a key
-
-
-if __name__ == "__main__":
-
-    from ucimlrepo import fetch_ucirepo
+def test_mushrooms():
+    np.random.seed(12345)
 
     mushroom = fetch_ucirepo(id=73)
 
-    # data
-    X_mush = mushroom.data.features
-    Y_mush = mushroom.data.targets
+    X_mush= mushroom.data.features.to_numpy()
+    Y_mush = mushroom.data.targets.to_numpy()
+    XY = np.concatenate((X_mush, Y_mush), axis=1).astype(str)
+    np.random.shuffle(XY)
+    size = Y_mush.size
+    X_mush_train = XY[0:int(size*0.15), :-1]
+    Y_mush_train = XY[0:int(size*0.15), -1]
 
-    id3 = ID3(X_mush.shape[1], X_mush, Y_mush)
+    X_mush_predict = XY[int(size*0.15):, :-1]
+    Y_mush_predict = XY[int(size*0.15):, -1]
+
+
+    id3 = ID3(X_mush.shape[1], X_mush_train, Y_mush_train.reshape(Y_mush_train.size, 1))
     id3.learn()
-    # print(id3.learn())
+    res = []
+    for row in X_mush_predict[:]:
+        res.append(id3.predict(row))
+
+    reals = list(y for y in Y_mush_predict)
+
+    size = 0
+    difference = []
+    for i, j in zip(res, reals):
+        if i == j:
+            difference.append(True)
+            size += 1
+        else:
+            difference.append(False)
+    print(size/len(difference))
+
+
+def test_breast_cancer():
+    np.random.seed(1234)
+
+    breast_cancer = fetch_ucirepo(id=14)
+
+    X_bre = breast_cancer.data.features.to_numpy()
+    Y_bre = breast_cancer.data.targets.to_numpy()
+    XY = np.concatenate((X_bre, Y_bre), axis=1).astype(str)
+    np.random.shuffle(XY)
+    size = Y_bre.size
+    X_bre_train = XY[0:int(size*1), :-1]
+    Y_bre_train = XY[0:int(size*1), -1]
+
+    X_bre_predict = XY[:int(size*1), :-1]
+    Y_bre_predict = XY[:int(size*1), -1]
+
+
+    id3 = ID3(X_bre.shape[1], X_bre_train, Y_bre_train.reshape(Y_bre_train.size, 1))
+    id3.learn()
+    res = []
+    for row in X_bre_predict[:]:
+        res.append(id3.predict(row))
+    print(res)
+    reals = list(y for y in Y_bre_predict)
+    print(reals)
+    size = 0
+    difference = []
+    for i, j in zip(res, reals):
+        if i == j:
+            difference.append(True)
+            size += 1
+        else:
+            difference.append(False)
+    print(size/len(difference))
+
+if __name__ == "__main__":
+    my_test()
+    test_mushrooms()
+    test_breast_cancer()
