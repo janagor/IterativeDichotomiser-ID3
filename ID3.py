@@ -10,6 +10,7 @@ from copy import deepcopy
 # import seaborn as sns
 # import matplotlib.pyplot as plt
 
+
 class ID3:
     def __init__(
         self,
@@ -34,7 +35,6 @@ class ID3:
         g = 1
         return [np.array(a) for a in groups.values()]
 
-
     def countEntropy(self, XY):
         groups = self.groupby(XY, -1)
         entropy = 0
@@ -51,7 +51,7 @@ class ID3:
         for group in groups:
             inf_gain -= (
                     group[:, 0].size / size *
-                self.countEntropy(group)
+                    self.countEntropy(group)
                 )
         return inf_gain
 
@@ -113,7 +113,6 @@ if __name__ == "__main__":
 
     x = X_mush.iloc[0:-1, :]
     y = Y_mush.iloc[0:-1, :]
-
 
     id3 = ID3(X_mush.shape[1], X_mush.to_numpy(), Y_mush.to_numpy())
     id3.learn()

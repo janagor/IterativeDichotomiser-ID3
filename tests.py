@@ -30,11 +30,11 @@ def test_mushrooms():
     XY = np.concatenate((X_mush, Y_mush), axis=1).astype(str)
     np.random.shuffle(XY)
     size = Y_mush.size
-    X_mush_train = XY[0:int(size*0.15), :-1]
-    Y_mush_train = XY[0:int(size*0.15), -1]
+    X_mush_train = XY[0:int(size*0.6), :-1]
+    Y_mush_train = XY[0:int(size*0.6), -1]
 
-    X_mush_predict = XY[int(size*0.15):, :-1]
-    Y_mush_predict = XY[int(size*0.15):, -1]
+    X_mush_predict = XY[int(size*0.6):, :-1]
+    Y_mush_predict = XY[int(size*0.6):, -1]
 
 
     id3 = ID3(X_mush.shape[1], X_mush_train, Y_mush_train.reshape(Y_mush_train.size, 1))
@@ -57,7 +57,7 @@ def test_mushrooms():
 
 
 def test_breast_cancer():
-    np.random.seed(1234)
+    np.random.seed(81) # 12,
 
     breast_cancer = fetch_ucirepo(id=14)
 
@@ -66,11 +66,11 @@ def test_breast_cancer():
     XY = np.concatenate((X_bre, Y_bre), axis=1).astype(str)
     np.random.shuffle(XY)
     size = Y_bre.size
-    X_bre_train = XY[0:int(size*1), :-1]
-    Y_bre_train = XY[0:int(size*1), -1]
+    X_bre_train = XY[0:int(size*0.6), :-1]
+    Y_bre_train = XY[0:int(size*0.6), -1]
 
-    X_bre_predict = XY[:int(size*1), :-1]
-    Y_bre_predict = XY[:int(size*1), -1]
+    X_bre_predict = XY[int(size*0.6):, :-1]
+    Y_bre_predict = XY[int(size*0.6):, -1]
 
 
     id3 = ID3(X_bre.shape[1], X_bre_train, Y_bre_train.reshape(Y_bre_train.size, 1))
@@ -78,9 +78,7 @@ def test_breast_cancer():
     res = []
     for row in X_bre_predict[:]:
         res.append(id3.predict(row))
-    print(res)
     reals = list(y for y in Y_bre_predict)
-    print(reals)
     size = 0
     difference = []
     for i, j in zip(res, reals):
@@ -92,6 +90,6 @@ def test_breast_cancer():
     print(size/len(difference))
 
 if __name__ == "__main__":
-    my_test()
-    test_mushrooms()
+    # my_test()
+    # test_mushrooms()
     test_breast_cancer()

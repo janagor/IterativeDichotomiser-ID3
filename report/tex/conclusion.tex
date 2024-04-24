@@ -1,0 +1,27 @@
+\section{Wnioski}
+
+Udało się zaimplementować minimax z przycinaniem $\alpha-\beta$.
+
+Głębokość przeszukiwania drzewa znaczącą wpływa na na czas obliczeń.
+
+Z wyników partii nie można jednoznacznie określić, która funkcja heurystyczna
+dawała najlepsze rezultaty. Wyniki partii  w większości nie wyglądały, jakby
+były skorelowane z głębokością przeszukiwań. Jedynie w sytuacji, gdy głębokość
+niebieskiego wynosiła 1 przy badaniu jego działania, wynik różnił się od
+pozostałych. Funkcja heurystyczna ,,tight'' dawała najgorsze rezultaty, w
+porównaniu do reszty heurystyk dla niebieskiego. Dla białego pozwalała jedynie
+trochę częściej uzyskać remis, gdy reszta heurystyk powodowała niemal wyłącznie
+porażki.
+
+Przyczyną dziwnych rezultatów badań może być charakter gry do której algorytm
+został zastosowany. Gracz niebieski odpowiada na ruchy gracza białego, co być
+może jest preferowaną opcją, ponieważ czeka się wtedy tylko na błąd oponenta.
+Ustawienie figur na szachownicy wymusza to, że w końcu dojdzie do kontaktu i
+serii wymian figur. Czarny mając ostateczny ruch może na tym zyskać. Warto
+zaznaczyć, że idealna gra warcab kończy się remisem, więc biały może mieć tutaj
+mniejszą korzyść z zaczynania, niż ma to miejsce w przypadku niebieskiego.
+
+W celu lepszego zbadania algorytmu należałoby przeprowadzić testy dla większych
+wartości głębokości przeszukiwania drzewa. Dodatkowo możnaby spróbować innych
+heurystyk lub zmodyfikować te już użyte.
+

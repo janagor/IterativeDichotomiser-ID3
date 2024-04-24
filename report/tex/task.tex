@@ -1,0 +1,48 @@
+\section{Zadanie}
+\subsection{Zadanie}
+Zaimplementować algorytm min-max z przycinaniem alfa-beta. Algorytm ten należy
+zastosować do gry w proste warcaby (checekers/draughts). Niech funkcja oceny
+planszy zwraca różnicę pomiędzy stanem planszy gracza a stanem przeciwnika. Za
+pion przyznajemy 1 punkt, za damkę 10 p. Proszę nie zapomnieć o znacznej
+nagrodzie za zwycięstwo.
+
+Przygotowałem dla Państwa kod, który powinien ułatwić wykonanie zadania. Nie
+można używać kodu z Internetu, czy bardziej ogólnie, kodu, którego nie jest
+się autorem.
+
+Wiem co jest dostępne w Internecie, większość dostępnych implementacji ma cechy
+szczególne, po których łatwo je rozpoznać.
+
+Zasady gry (w skrócie: wszyscy ruszają się po 1 polu. Pionki tylko w kierunku
+wroga, damki w dowolnym) z następującymi modyfikacjami:
+
+\begin{itemize}
+  \item Bicie nie jest wymagane.
+  \item Dozwolone jest tylko pojedyncze bicie (bez serii).
+\end{itemize}
+
+\subsection{Pytania}
+
+\begin{itemize}
+  \item Czy gracz sterowany przez AI zachowuje się rozsądnie z ludzkiego punktu
+    widzenia? Jeśli nie to co jest nie tak?
+\end{itemize}
+
+Niech komputer gra z komputerem (bez wizualizacji), zmieniamy parametry jednego
+z oponentów, badamy jak zmiany te wpłyną na liczbę jego wygranych. Należy
+zbadać wpływ:
+\begin{itemize}
+  \item Głębokości drzewa przeszukiwań
+  \item Alternatywnych funkcji oceny stanu (nadal ocena jest różnicą pomiędzy
+    oceną stanu gracza a oceną przeciwnika), np.:
+    \begin{enumerate}
+      \item nagrody jak w wersji podstawowej + nagroda za stopień zwartości
+        grupy (jest dobrze jak wszyscy są blisko siebie lub przy krawędzi
+        planszy)
+      \item za każdy pion na własnej połowie planszy otrzymuje się 5 nagrody,
+        na połowie przeciwnika 7, a za każdą damkę 10.
+      \item za każdy nasz pion otrzymuje się nagrodę w wysokości: (5 + numer
+        wiersza, na którym stoi pion) (im jest bliżej wroga tym lepiej), a
+        za każdą damkę dodatkowe 10.
+    \end{enumerate}
+\end{itemize}

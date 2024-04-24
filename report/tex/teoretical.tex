@@ -1,0 +1,84 @@
+
+\section{Część teoretyczna}
+\subsection{Gry dwuosobowe}
+Znalezienie optymalnej strategii w grze można sprowadzić do problemu
+przeszukiwania przestrzeni stanów. Przykładem takiej gry może być skończona
+gra dwuosobowa o sumie zerowej. W takiej sytuacji zysk jednego gracza jest
+równy stracie drugiego gracza - interesy graczy są przeciwstawne. Takie gry
+możemy podzielić na kategorie pod względem dostępu do informacji (informacja
+o stanie planszy może być pełna lub niepełna dla graczy) lub pod względem tego,
+czy w grze występuje czynnik losowy (mamy wtedy podział na gry deterministyczne
+i hazardowe).
+
+Poniższe ćwiczenie dotyczy gry warcaby (ang. checkers), która jest grą
+deterministyczną, w której obaj gracze mają dostęp do pełnej informacji o
+stanie gry i planszy.
+
+Grę można opisać jak $\langle S,P,s_0, T, w \rangle$, gdzie:
+\begin{itemize}
+  \item $s \in S$ - stan (np. ustawienie figur na szachownicy) i informacja,
+    kto wykonuje ruch,
+  \item $p \in P$ - funkcja następnika, reprezentuje posinięcia w grze,
+    $p:S \leftarrow S$ pokazu dostępne stany potomne dla danego stanu,
+  \item $s_0 \in S$ - stan początkowy,
+  \item $T \subseteq S$ - zbiór stanów terminalnych (kończących grę),
+  \item $w$ - funkcja wypłaty zdefiniowana dla stanów terminalnych $s \in T$.
+\end{itemize}
+
+\subsection{MiniMax}
+Algorytm MiniMax podaje ocenę dla danego węzła, przeglądając węzły potomne
+na określoną głębokość. Wykorzystuje on funkcję heurystyczną $h(s)$, która
+ocenia stan gry dostarczając ocenę lub jej oszacowanie.
+
+W zadaniu badano różne dostarczone funkcje heurystyczne oceniające stan
+planszy.
+
+W zadaniu należało wykorzystać algorytm MiniMax z przycinaniem alfa - beta.
+Polega ono na uproszczeniu drzewa przeszukiwań poprzez nieprzeglądanie ścieżek,
+których wybór byłby gorszy od obecnie najlpszego wyboru dla innej ścieżki.
+
+\subsection{Algorytm MiniMax z przycinaniem $\alpha$ - $\beta$: pseudokod}
+\IncMargin{1em}
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \DontPrintSemicolon
+  \caption{AlfaBeta}\label{minmax}
+  \KwData{
+    $
+    s: \text{stan i informacja, kto wykonuje ruch},\newline
+    d: \text{głębokość},\newline
+    move\_max: \text{zmienna binarna, czy rusza się Max czy Min},\newline
+    \alpha: \text{najlepsza obecna wypłata dla Max.} \newline
+    \text{Przy początkowym wywołaniu równa $-\infty$.},\newline
+    \beta: \text{najlepsza obecnie wypłata dla gracza Min.} \newline
+    \text{Przy początkowym wywołaniu równa $\infty$.}
+    $
+  }
+  \KwResult{
+    $\alpha$ lub $\beta$: \text{wartość funkcji oceny dla najlepszego rozwiązania
+    przy zadanych parametrach}
+  }
+  \Begin{
+    \If{$s \in T$ \text{or} $d=0$}
+    {\Return $h(s)$}
+    \emph{$U \leftarrow P(s)$}\;
+    \uIf{$move\_max$}{
+      \For{$u \in U$}{
+        $\alpha$ $\leftarrow$ $\max$\{$\alpha$, \text{AlfaBeta}($u$, $d-1$, \textbf{not} $move\_max$, $\alpha$, $\beta$)\}\;
+        \If{$\alpha \leq \beta$}{
+          \Return $\alpha$
+        }
+      }
+      \Return{$\alpha$}
+    }\Else{
+      \For{$u \in U$}{
+        $\alpha$ $\leftarrow$ $\min$\{$\alpha$, \text{AlfaBeta}($u$, $d-1$, \textbf{not} $move\_max$, $\alpha$, $\beta$)\}\;
+        \If{$\alpha \leq \beta$}{
+          \Return $\beta$
+        }
+      }
+      \Return{$\beta$}
+    }
+  }
+\end{algorithm}
+
