@@ -1,84 +1,55 @@
 
 \section{Część teoretyczna}
-\subsection{Gry dwuosobowe}
-Znalezienie optymalnej strategii w grze można sprowadzić do problemu
-przeszukiwania przestrzeni stanów. Przykładem takiej gry może być skończona
-gra dwuosobowa o sumie zerowej. W takiej sytuacji zysk jednego gracza jest
-równy stracie drugiego gracza - interesy graczy są przeciwstawne. Takie gry
-możemy podzielić na kategorie pod względem dostępu do informacji (informacja
-o stanie planszy może być pełna lub niepełna dla graczy) lub pod względem tego,
-czy w grze występuje czynnik losowy (mamy wtedy podział na gry deterministyczne
-i hazardowe).
+\subsection{Drzewo decyzyjne}
+Przedmiotem klasyfikacji drzewa decyzyjnego są obiekty w danym zbiorze $U$
+charakteryzowane przez pewien zestaw $D$ atrybutów nominalnych. Każdy obiekt
+z $U$ ma $|D|$ atrybutów, z których każdy ma wartość ze skończonego zbioru.
+Każdy obiekt w $U$ jest pewnej klasy, przy czym zbiór wszystkich klas to $Y$.
 
-Poniższe ćwiczenie dotyczy gry warcaby (ang. checkers), która jest grą
-deterministyczną, w której obaj gracze mają dostęp do pełnej informacji o
-stanie gry i planszy.
+Zadanie polega na zbudowaniu klasyfikatora, który na podstawie atrybutów będzie
+odgadywał klasy obiektów.
 
-Grę można opisać jak $\langle S,P,s_0, T, w \rangle$, gdzie:
-\begin{itemize}
-  \item $s \in S$ - stan (np. ustawienie figur na szachownicy) i informacja,
-    kto wykonuje ruch,
-  \item $p \in P$ - funkcja następnika, reprezentuje posinięcia w grze,
-    $p:S \leftarrow S$ pokazu dostępne stany potomne dla danego stanu,
-  \item $s_0 \in S$ - stan początkowy,
-  \item $T \subseteq S$ - zbiór stanów terminalnych (kończących grę),
-  \item $w$ - funkcja wypłaty zdefiniowana dla stanów terminalnych $s \in T$.
-\end{itemize}
-
-\subsection{MiniMax}
-Algorytm MiniMax podaje ocenę dla danego węzła, przeglądając węzły potomne
-na określoną głębokość. Wykorzystuje on funkcję heurystyczną $h(s)$, która
-ocenia stan gry dostarczając ocenę lub jej oszacowanie.
-
-W zadaniu badano różne dostarczone funkcje heurystyczne oceniające stan
-planszy.
-
-W zadaniu należało wykorzystać algorytm MiniMax z przycinaniem alfa - beta.
-Polega ono na uproszczeniu drzewa przeszukiwań poprzez nieprzeglądanie ścieżek,
-których wybór byłby gorszy od obecnie najlpszego wyboru dla innej ścieżki.
-
-\subsection{Algorytm MiniMax z przycinaniem $\alpha$ - $\beta$: pseudokod}
+\subsection{Algorytm ID3: pseudokod}
 \IncMargin{1em}
 \begin{algorithm}[H]
   \SetAlgoLined
   \DontPrintSemicolon
-  \caption{AlfaBeta}\label{minmax}
+  \caption{Iterative Dichotomiser 3}\label{ID3}
   \KwData{
     $
-    s: \text{stan i informacja, kto wykonuje ruch},\newline
-    d: \text{głębokość},\newline
-    move\_max: \text{zmienna binarna, czy rusza się Max czy Min},\newline
-    \alpha: \text{najlepsza obecna wypłata dla Max.} \newline
-    \text{Przy początkowym wywołaniu równa $-\infty$.},\newline
-    \beta: \text{najlepsza obecnie wypłata dla gracza Min.} \newline
-    \text{Przy początkowym wywołaniu równa $\infty$.}
+    Y: \text{zbiór klas},\newline
+    D: \text{zbiór atrybutów wejściowych},\newline
+    U \neq 0: \text{zbiór par uczących}
     $
   }
-  \KwResult{
-    $\alpha$ lub $\beta$: \text{wartość funkcji oceny dla najlepszego rozwiązania
-    przy zadanych parametrach}
-  }
+  \KwResult{Drzewo decyzyjne}
   \Begin{
-    \If{$s \in T$ \text{or} $d=0$}
-    {\Return $h(s)$}
-    \emph{$U \leftarrow P(s)$}\;
-    \uIf{$move\_max$}{
-      \For{$u \in U$}{
-        $\alpha$ $\leftarrow$ $\max$\{$\alpha$, \text{AlfaBeta}($u$, $d-1$, \textbf{not} $move\_max$, $\alpha$, $\beta$)\}\;
-        \If{$\alpha \leq \beta$}{
-          \Return $\alpha$
-        }
-      }
-      \Return{$\alpha$}
-    }\Else{
-      \For{$u \in U$}{
-        $\alpha$ $\leftarrow$ $\min$\{$\alpha$, \text{AlfaBeta}($u$, $d-1$, \textbf{not} $move\_max$, $\alpha$, $\beta$)\}\;
-        \If{$\alpha \leq \beta$}{
-          \Return $\beta$
-        }
-      }
-      \Return{$\beta$}
-    }
+    \If{$y_i == y$ $\quad$ $\forall$ $\langle$ $x_i$, $y_i$ $\rangle$ $\in$ $\text{U}$}
+    {\Return $\text{Liść zawierający klasę } y.$}
+    \If{$|\text{D}| == 0$}
+    {\Return $\text{Liść zawierający najczęstszą klasę w } U.$}
+    \emph{$d = \arg \max_{d \in D} \text{InfGain}(d, U)$}\;
+    \emph{$U_j$ $=$ $\{$ $\langle$ $x_i$, $y_i$ $\rangle$ $\in$ $U$ : $x_i [d]$
+    $= d_j\}$,$\textbf{ gdzie}$ \linebreak $d_j$} $\text{- j-ta wartość atrybutu }$ \emph{$d$}\;
+    \emph{\Return}$\text{ Drzewo z korzeniem } d \text{ oraz krawiędziami: }\linebreak d_1,d_2,\dots \text{ prowadzącymi do drzew: }\linebreak ID3(Y, D-\{d\}, U_1), ID3(Y, D-\{d\}, U_2)\dots$\;
   }
 \end{algorithm}
 
+\subsection{Miara zróżnicowania - entropia}
+Kluczowym elementem algorytmu jest wybór atrybutu przypisanego do korzenia
+drzewa. Najlepiej byłoby wtedy, gdyby na podstawie atrybutu dało się podzielić
+zbiór $U$ na podzbiory, takie że w każdym z nich występują wyłącznie obiekty
+innej klasy. Nie jest to zwykle możliwe, dlatego stosuje się kryterium
+zmierzające do stworzenia sytuacji zbliżonej, tj. jak największego zróżnicowania
+występowania poszczęgólnych klas w podzbiorach. Miarą tego zróżnicowania jest
+entropia:
+$$I(U) = -\sum_{i}f_i\ln{f_i},$$
+gdzie $f_i$ - częstość $i$-tej klasy.
+
+Entropia zbioru podzielonego na podzbiory jest to średnia ważona entropii podzbiorów, a mianowicie
+$$ Inf(d,U) = \sum_j \frac{S_j||}{|S|}I(S_j),$$
+gdzie $|S|$ to liczba elementów  zbioru $S$, zaś $S_j$, $j=1,2,\dots$ to zbiory
+powstałe przez podział zbioru $S$ ze wzsględu na wartość atrybutu $D$.
+
+Zdobycz informacyjna służąca do wyboru atrybutu $d$ ma następującą definicję:
+$$ InfGain(d,U) = I(U) - Inf(d,U).$$

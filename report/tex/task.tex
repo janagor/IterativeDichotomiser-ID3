@@ -1,48 +1,37 @@
 \section{Zadanie}
 \subsection{Zadanie}
-Zaimplementować algorytm min-max z przycinaniem alfa-beta. Algorytm ten należy
-zastosować do gry w proste warcaby (checekers/draughts). Niech funkcja oceny
-planszy zwraca różnicę pomiędzy stanem planszy gracza a stanem przeciwnika. Za
-pion przyznajemy 1 punkt, za damkę 10 p. Proszę nie zapomnieć o znacznej
-nagrodzie za zwycięstwo.
+Zaimplementować klasyfikator ID3 (drzewo decyzyjne). Atrybuty nominalne, testy
+tożsamościowe. Podać dokładność i macierz pomyłek na zbiorach: \textbf{Breast cancer} i
+\textbf{mushroom}. Dlaczego na jednym zbiorze jest znacznie lepszy wynik niż na drugim?
+Do potwierdzenia lub odrzucenia postawionych hipotez konieczne może być
+przeprowadzenie dodatkowych eksperymentów ze zmodyfikowanymi zbiorami danych.
+Sformułować i spisać wnioski.
 
-Przygotowałem dla Państwa kod, który powinien ułatwić wykonanie zadania. Nie
-można używać kodu z Internetu, czy bardziej ogólnie, kodu, którego nie jest
-się autorem.
-
-Wiem co jest dostępne w Internecie, większość dostępnych implementacji ma cechy
-szczególne, po których łatwo je rozpoznać.
-
-Zasady gry (w skrócie: wszyscy ruszają się po 1 polu. Pionki tylko w kierunku
-wroga, damki w dowolnym) z następującymi modyfikacjami:
-
+\subsection{Wskazówki dotyczące ćwiczenia}
 \begin{itemize}
-  \item Bicie nie jest wymagane.
-  \item Dozwolone jest tylko pojedyncze bicie (bez serii).
-\end{itemize}
-
-\subsection{Pytania}
-
-\begin{itemize}
-  \item Czy gracz sterowany przez AI zachowuje się rozsądnie z ludzkiego punktu
-    widzenia? Jeśli nie to co jest nie tak?
-\end{itemize}
-
-Niech komputer gra z komputerem (bez wizualizacji), zmieniamy parametry jednego
-z oponentów, badamy jak zmiany te wpłyną na liczbę jego wygranych. Należy
-zbadać wpływ:
-\begin{itemize}
-  \item Głębokości drzewa przeszukiwań
-  \item Alternatywnych funkcji oceny stanu (nadal ocena jest różnicą pomiędzy
-    oceną stanu gracza a oceną przeciwnika), np.:
-    \begin{enumerate}
-      \item nagrody jak w wersji podstawowej + nagroda za stopień zwartości
-        grupy (jest dobrze jak wszyscy są blisko siebie lub przy krawędzi
-        planszy)
-      \item za każdy pion na własnej połowie planszy otrzymuje się 5 nagrody,
-        na połowie przeciwnika 7, a za każdą damkę 10.
-      \item za każdy nasz pion otrzymuje się nagrodę w wysokości: (5 + numer
-        wiersza, na którym stoi pion) (im jest bliżej wroga tym lepiej), a
-        za każdą damkę dodatkowe 10.
-    \end{enumerate}
+  \item Atrybuty nominalne - każdy atrybut może przyjmować jedną z kilku
+    dozwolonych wartości, zakładamy, że wartość atrybutu to napis, np. ``kot'',
+    ``a'', ``20-34'', ``>40''.
+  \item Testy tożsamościowe - jeżeli atrybut testowany w danym węźle ma np. 3
+    dozwolone wartości, np. a, b, c, to z węzła tego wychodzą 3 krawędzie
+    oznaczone: a, b, c.
+  \item Na tym ćwiczeniu klasyfikator trenuje się na zbiorze trenującym, a
+    ocenia jego jakość na zbiorze testującym. Należy losowo podzielić zbiór
+    danych na trenujący i testujący w stosunku 3:2.
+  \item Jeżeli zbiór danych zawiera numery lub identyfikatory wierszy to należy
+    je wyrzucić - nie chcemy uczyć się identyfikatorów wierszy.
+  \item Brakujące wartości atrybutów taktujemy jako wartość, np. jeżeli symbol
+    ``?'' oznacza brakującą wartość, a symbole ``a'', ``b'' wartości normalne, to z
+    naszego punktu widzenia mamy 3 wartości normalne (fachowo: 3 wartości
+    atrybutu): ``a'', ``b'', ``?''.
+  \item Tak naprawdę to nie musimy rozumieć dziedziny problemu - na wejściu mamy
+    napisy, na wyjściu napisy, nie ważne czy klasyfikujemy sekwencje DNA,
+    grzyby, czy samochody.
+  \item Nazwa pliku ze zbiorem danych jest parametrem algorytmu klasyfikacji,
+    kod klasyfikatora powinien być w stanie obsłużyć inny zbiór danych o tym
+    samym rozkładzie kolumn (czyli nie należy wpisywać wartości atrybutów ``na
+    sztywno'' w kodzie).
+  \item W repozytorium ze zbiorami danych zwykle w plikach ``.names'' jest
+    napisane, który atrybut to klasa (czyli wartości której kolumny mamy się
+    nauczyć przewidywać).
 \end{itemize}
