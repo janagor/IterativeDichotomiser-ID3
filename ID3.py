@@ -6,9 +6,6 @@ from itertools import groupby
 import numpy as np
 import pandas as pd
 from copy import deepcopy
-# from sklearn.metrics import confusion_matrix
-# import seaborn as sns
-# import matplotlib.pyplot as plt
 
 
 class ID3:
@@ -32,7 +29,6 @@ class ID3:
                 groups[row[indx]] = [row]
             else:
                 groups[row[indx]].append(row)
-        g = 1
         return [np.array(a) for a in groups.values()]
 
     def countEntropy(self, XY):
@@ -101,57 +97,3 @@ class ID3:
             if type(current_node) is not type({}):
                 return current_node
 
-
-if __name__ == "__main__":
-
-    from ucimlrepo import fetch_ucirepo
-
-    mushroom = fetch_ucirepo(id=73)
-
-    X_mush = mushroom.data.features
-    Y_mush = mushroom.data.targets
-
-    x = X_mush.iloc[0:-1, :]
-    y = Y_mush.iloc[0:-1, :]
-
-    id3 = ID3(X_mush.shape[1], X_mush.to_numpy(), Y_mush.to_numpy())
-    id3.learn()
-    res = []
-    for _, row in X_mush.iterrows():
-        res.append(id3.predict(row))
-
-    reals = list(y[0] for y in Y_mush.to_numpy())
-
-    size = 0
-    difference = []
-    for i, j in zip(res, reals):
-        if i == j:
-            difference.append(True)
-            size += 1
-        else:
-            difference.append(False)
-    print(size/len(difference))
-
-
-    from ucimlrepo import fetch_ucirepo
-
-    breast_cancer = fetch_ucirepo(id=14)
-
-    X_bre = breast_cancer.data.features
-    Y_bre = breast_cancer.data.targets
-
-    id3 = ID3(X_bre.shape[1], X_bre.to_numpy(), Y_bre.to_numpy())
-    id3.learn()
-    res = []
-    for _, row in X_bre.iterrows():
-        res.append(id3.predict(row))
-    reals = list(y[0] for y in Y_bre.to_numpy())
-    size = 0
-    difference = []
-    for i, j in zip(res, reals):
-        if i == j:
-            difference.append(True)
-            size += 1
-        else:
-            difference.append(False)
-    print(size/len(difference))
