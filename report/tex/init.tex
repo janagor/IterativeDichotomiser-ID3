@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{listings}
 \usepackage{geometry}
 \usepackage{multirow}
 \usepackage{graphicx} % Required for inserting images
@@ -28,7 +29,9 @@
 \usepackage{listings}
 \usepackage{algpseudocode}
 \usepackage[linesnumbered, ruled, longend]{algorithm2e}
-
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
 \lstset{
   inputencoding = utf8,  % Input encoding
   extendedchars = true,  % Extended ASCII

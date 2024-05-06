@@ -58,12 +58,6 @@ class ID3:
         results = list(zip(gains, attributes))
         return max(results, key=lambda result: result[0])[1]
 
-    def learn(self) -> Dict:
-        # create copy of parameters
-        XY = deepcopy(self.XY)
-        attributes = self.attributes
-        self.tree = self.learn_rec(attributes, XY)
-
     def learn_rec(self, attributes, XY) -> Dict:
         if XY.size == 0:
             raise ValueError  # no elements in X
@@ -73,7 +67,7 @@ class ID3:
         if attributes == []:
             values, counts = np.unique(XY[:, -1], return_counts=True)
             return values[np.argmax(counts)]  # return element that occurs the most
-        D = self.find_inf_gain_maximizing(attributes, XY)  # int
+        D = self.find_inf_gain_maximizing(attributes, XY)  # column index
         D_values = np.unique(XY[:, D])  # possible values in D column
         result = {D: {}}
         attributes.remove(D)
@@ -81,6 +75,12 @@ class ID3:
             subset = XY[XY[:, D] == D_value, :]
             result[D][D_value] = self.learn_rec(attributes, subset)
         return result
+
+    def learn(self) -> Dict:
+        # create copy of parameters
+        XY = deepcopy(self.XY)
+        attributes = self.attributes
+        self.tree = self.learn_rec(attributes, XY)
 
     def predict(self, sample: np.array):
         sample = sample.astype(str)

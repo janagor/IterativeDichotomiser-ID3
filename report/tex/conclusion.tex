@@ -1,27 +1,23 @@
 \section{Wnioski}
 
-Udało się zaimplementować minimax z przycinaniem $\alpha-\beta$.
+Udało się zaimplementować algorytm ID3.
 
-Głębokość przeszukiwania drzewa znaczącą wpływa na na czas obliczeń.
+Wyniki działania algorytmu mogą się w znaczący sposób od zbioru, na którego
+podstawie jest tworzone drzewo decyzyjne i są przeprowadzane testy.
 
-Z wyników partii nie można jednoznacznie określić, która funkcja heurystyczna
-dawała najlepsze rezultaty. Wyniki partii  w większości nie wyglądały, jakby
-były skorelowane z głębokością przeszukiwań. Jedynie w sytuacji, gdy głębokość
-niebieskiego wynosiła 1 przy badaniu jego działania, wynik różnił się od
-pozostałych. Funkcja heurystyczna ,,tight'' dawała najgorsze rezultaty, w
-porównaniu do reszty heurystyk dla niebieskiego. Dla białego pozwalała jedynie
-trochę częściej uzyskać remis, gdy reszta heurystyk powodowała niemal wyłącznie
-porażki.
+Rozmiar zbioru wejściowego nie musi koniecznie oznaczać, że jeden ze zbiorów
+jest łatwiejszy do zbadania niż inny. Możliwe jest uzyskiwanie dobrych wyników,
+trenując na małym zbiorze, jeśli dobrze są w nim odzwierciedlone właściwości
+całej populacji.
 
-Przyczyną dziwnych rezultatów badań może być charakter gry do której algorytm
-został zastosowany. Gracz niebieski odpowiada na ruchy gracza białego, co być
-może jest preferowaną opcją, ponieważ czeka się wtedy tylko na błąd oponenta.
-Ustawienie figur na szachownicy wymusza to, że w końcu dojdzie do kontaktu i
-serii wymian figur. Czarny mając ostateczny ruch może na tym zyskać. Warto
-zaznaczyć, że idealna gra warcab kończy się remisem, więc biały może mieć tutaj
-mniejszą korzyść z zaczynania, niż ma to miejsce w przypadku niebieskiego.
+Znacząct wpływ na wyniki algorytmu ma to, jak atrybuty obiektów ze zbioru
+badanego mogę podzielić zbiór na podzbiory ze względu na klasy tych obiektów.
+IM uzyskiwane podzbiory bardziej różnią się od siebie nawzajem, tym lepsze
+wyniki możemy uzyskać. Wiąże się to z krokiem działania algorytmu, w którym to
+jest wyznaczany najlepszy atrybut pod względem uzyskiwanego zysku zbioru przy
+podziale opartym na wartościach tego atrybutu.
 
-W celu lepszego zbadania algorytmu należałoby przeprowadzić testy dla większych
-wartości głębokości przeszukiwania drzewa. Dodatkowo możnaby spróbować innych
-heurystyk lub zmodyfikować te już użyte.
-
+W celu sprawdzenia tej hipotezy możnaby wykonać więcej testów na zbiorach, o
+których wiemy, jak dobrze różna wartość atrybutów skutkuje różną wartością
+klasy obiektu i porównać to ze zbioramy, w których nie ma widocznie sensownych
+sposobów podziału zbioru.

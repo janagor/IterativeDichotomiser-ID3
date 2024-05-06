@@ -1,252 +1,258 @@
 \section{Część praktyczna}
-\subsection{Subiektywna ocena działania algorytmu}
-Celem pierwszej części eksperymetu było zaimplementowanie algorytmu dla gry
-w warcaby i subiektywna ocena wybranych przez algorytm posunięć.
+\subsection{Badanie zbiorów ``Breast cancer'' i ``Mushroom''}
+Pierwszą rzeczą po zaimplementowaniu algorytmu było przetestowanie go na
+zbiorach: ``Breast cancer'' oraz ``Mushroom''. Oba zbiory zostały podzielone na
+dwa podzbiory: zbiór trenujący oraz zbiór testujący w relacji 3:2 w sposób
+losowy.
 
-Algorytm działał zgodnie z przyjętą heurystyką: różnica sumy wartości własnych
-pionków z sumą wartości pionków przeciwnika. Dla głębokości równej 1 zachowanie
-komputera można nazwać "zachłannym" - Gdy tylko mógł wykonać bicie, to to
-robił. Jednak wielokrotnie samemu poruszał się na pole, z którego mógł zostać
-zbity bez możliwości odbicia.
+W tabelach zostały przedstawione przykładowe wyniki uzyskane za pomocą funkcji
+\textit{classification_report(actual, predicted)} z pakietu
+\textit{sklearn.metrics}, gdzie \textit{actual} to rzeczywiste klasy próbek, a
+\textit{predicted} to zbiór klas wyznaczonych dla tych próbek za pomocą 
+algorytmu.
 
-Dla kontrastu, przy głębokości równej 6 jego gra była znacznie lepsza. Ruchy
-komputera wydawały się być rozsądne. Niezależnie jednak od tego, czy ruch był
-,,naturalnym'' odbiciem jako reakcja na bicie, czy też występował w trudniejszej
-do ecenienia pozycji, czas potrzebny na wykonanie ruchu był tak samo długi.
+Na obrazkach zostały przydstawione macierze pomyłek dla zbiorów dla
+przykładowych wywołań algorytmu.
+
+\begin{table}[h!]
+        \centering
+        \begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+                \hline
+                \multicolumn{5}{|c|}{Wyniki dla zbioru ``Breast cancer''} \\
+                \hline
+                 & precision & recall & f1-score & support \\
+                \hline
+                no-recurrence-events & 0,73 & 0,89 & 0,80 & 81 \\
+                \hline
+                recurrence-events & 0,44 & 0,21 & 0,28 & 34 \\
+                \hline
+                accuracy & - & - & 0,69 & 115 \\
+                \hline
+                macro avg & 0,58 & 0,55 & 0,54 & 115 \\
+                \hline
+                weighted avg & 0,64 & 0,69 & 0,65 & 115 \\
+                \hline
+        \end{tabular}
+        \caption{Wyniki pomiarów dla zbioru ``Breast cancer'' przy podziale o stosunku 3:2.}
+\end{table}
+
+\begin{table}[h!]
+        \centering
+        \begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+                \hline
+                \multicolumn{5}{|c|}{Wyniki dla zbioru ``Mushroom''} \\
+                \hline
+                 & precision & recall & f1-score & support \\
+                \hline
+                e & 1,00 & 1,00 & 1,00 & 1699 \\
+                \hline
+                p & 1,00 & 1,00 & 1,00 & 1551 \\
+                \hline
+                accuracy & - & - & 1,00 & 3250 \\
+                \hline
+                macro avg & 1,00 & 1,00 & 1,00 & 3250 \\
+                \hline
+                weighted avg & 1,00 & 1,00 & 1,00 & 3250 \\
+                \hline
+        \end{tabular}
+        \caption{Wyniki pomiarów dla zbioru ``Mushroom'' przy podziale o stosunku 3:2.}
+\end{table}
+
 
 
 \begin{figure}[h!]
 	\centering
-	\begin{subfigure}[b]{0.39\linewidth}
-		\includegraphics[width=\linewidth]{photos/complexity_linear.png}
-		\caption{Wykres liniowy.}
+	\begin{subfigure}[b]{0.7\linewidth}
+		\includegraphics[width=\linewidth]{photos/bre_3_to_2_r.png}
+		\caption{Macierz pomyłek dla zbioru ``Breast cancer''.}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.39\linewidth}
-		\includegraphics[width=\linewidth]{photos/complexity_logarithmic.png}
-		\caption{Wykres logarytmiczny.}
+	\begin{subfigure}[b]{0.7\linewidth}
+		\includegraphics[width=\linewidth]{photos/mush_3_to_2_r.png}
+		\caption{Macierz pomyłek dla zbioru ``Mushroom''.}
 	\end{subfigure}
-        \caption{Wykresy złożoności czasowej działania algorytmu w zależności
-        od głębokości przeszukiwania.}
+        \caption{Macierze pomyłek dla badanych zbiorów przy podziale o stosunku 3:2.}
+\end{figure}
+
+\clearpage
+
+Dokładność algorytmu na zbiorze ``Breast cancer'' wyniosła 0.69, podczas gdy
+dla zbioru ``Mushrooms'' wyniosła 1.00. Są to wyniki porównywalne z tymi
+przedstawiony na stronie uzyskanymi dla innych algorytmów, z której zbiory
+zostały pozyskane.
+
+\subsection{Badanie zbioru ``Mushroom'' dla różych parametrów}
+W dalczej części ćwiczenia zostały wykonane dodatkowe testy mające na celu
+sprawdzenie, co jest przyczyną odmiennych wyników dla obu zbiorów testowanych.
+
+
+Pierwszymi parametrami, które zostały sprawdzone były rozmiar zbiorów oraz
+liczba atrybutów uwzględnionych w klasyfikacji.
+\subsubsection{Sprawdzenie wpływu rozmiaru zbioru}
+Zbiór ``Breast cancer'' zawiera 286 obiektów, podczas gdy ``Mushroom'' zawiera
+ich 8124. W celu sprawdzenia, czy ma to wpływ na wyniki badań, zamiast
+wykorzystywać cały zbiór ``Mushrooms'' wykorzystałem tyle obiektów, ile zawiera
+zbiór ``Breast cancer''. Obiekty były wybierane w sposób losowy.
+
+
+W tabeli oraz na obrazku przedstawiono rezultat badań.
+
+\begin{table}[h!]
+        \centering
+        \begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+                \hline
+                \multicolumn{5}{|c|}{Wyniki dla zbioru ``Mushroom''} \\
+                \hline
+                 & precision & recall & f1-score & support \\
+                \hline
+                e & 0,98 & 1,00 & 0,99 & 59 \\
+                \hline
+                p & 1,00 & 0,98 & 0,99 & 55 \\
+                \hline
+                accuracy & - & - & 0,99 & 114 \\
+                \hline
+                macro avg & 0,99 & 0,99 & 0,99 & 114 \\
+                \hline
+                weighted avg & 0,99 & 0,99 & 0,99 & 114 \\
+                \hline
+        \end{tabular}
+        \caption{Wyniki pomiarów dla zbioru ``Mushroom'' przy podziale o stosunku 3:2.}
+\end{table}
+
+\clearpage
+\begin{figure}[ht!]
+	\centering
+		\includegraphics[width=0.7\linewidth]{photos/mush_train_size_test_size.png}
+        \caption{Macierz pomyłek dla zbioru ``Mushroom'' dla rozmiaru zbioru odpowiadającemu rozmiarowi zbioru ``Breast cancer'' przy podziale o stosunku 3:2.}
 \end{figure}
 
 
-\subsection{Uwagi dotyczące implementacji algorytmu}
-\begin{itemize}
-    \item Kilkakrotnie podczas testów zaobserwowałem, że w pewnym momencie obaj gracze
-    sterowani przez algorytm zaczynały powtarzać posunięcia, co uniemożliwiało
-    określenie, który z nich wygrał. Dodatkowo, wywołując algorytm dla takich
-    samych parametrów otrzymywałem taki sam przebieg partii. Żeby zmienić te
-    rzeczy, mając listę par <ruch, ocena> przed posortowaniem ich ze względu na
-    wartość oceny mieszałem je i dopiero wtedy sortowałem. Pozwalało to na wybór
-    w tej samej sytuacji innych ścieżek, co zmniejszało monotonny charakter
-    rozgrywki.
+Z testu nie wynika, że zmniejszenie liczby próbek jest w tym przypadku źródłem
+różnicy w wynikach. Algorytm ma niemal taką samą dokładność. Znacznie częściej
+pojawiają się sytuacje, w których w zbiorze trenującym nie było wartości
+atrybutu, który wystąpił w zbiorze testowym. Takich sytuacji nie rozwiązywałem:
+wyszukiwałem inne ziarno dla generatora liczb pseudolosowych dla którego testy
+przebiegały bez wystąpienia wyjątku.
 
-    \item Głębokość równa 0 została zaimplementowana jako wybór losowego ruchu spośród
-dostępnych.
+Mniejszy rozmiar zbioru obiektów nie jest tutaj powodem różnic.
 
-    \item W przypadku heurystyki stosującej ocenę zwartości grupy lub bycie przy
-    krawędziach planszy zastosowano następującą interpretację: ,,zwartość'' była
-    wyznaczana zarówno poziomo jak i poziomo. Wyliczano ją jako odchylenie
-    standardowe liczone dla zbioru położeń (wybranej składowej) wszystkich figur
-    danego koloru. Następnie obie sumy (dla poziomu i pionu) sumowano. Zwracano
-    różnicę oceny pomiędzy oceną białego a czarnego przeskalowaną o współczynnik.
-    Współczynnik wybrano po obserwacji działania algorytmu dla różnych wartości.
-    Obecność figury przy krawędzi miało wpływ na ocenę danego piona rzędu 0.1.
-\end{itemize}
-\subsection{Badanie wpływu głębokości drzewa przeszukiwań oraz rodzaju funkcji
-oceny stanu na liczbę wygranych algorytmu}
+\subsubsection{Sprawdzenie wpływu liczby atrybutów}
+Obiekty ze zbioru ``Mushroom'' są charakteryzowane przez zestaw 22 atrybutów. W
+przypadku zbioru ``Breast cancer'' liczba atrybutów jest równa 9. W tym
+eksperymencie, zamiast korzystać ze wszystkich atrybutów obiektów ze zbioru
+``Mushroom'', wybierałem losowo 9 z nich i przeprowadzałem testy uwzględniając
+tylko te wybrane.
 
-Celem drugiej części eksperymetu było zbadanie zachowania komputera dla różnych
-wartości głębokości drzewa przeszukiwań oraz dla różnych funkcji
-heurystycznych, które miały zostać zaimplementowane. 
+W tabeli oraz na obrazku zostały przedstawione wyniki dla najgorszego przypadku
+uzyskanego w trakcie testów.
 
-\begin{table}[htbp!]
-    \centering
-    \begin{tabular}{ |c|c|c|}
-            \hline
-            \multicolumn{3}{|c|}{Wpływ głębokości drzewa przeszukiwań oraz rodzaju funkcji oceny} \\
-            \multicolumn{3}{|c|}{stanu na liczbę wygranych algorytmu. Badany gracz niebieski.} \\
-            \hline
-            heurystyka & głębokość & wynik (z perspektywy białego) \\
-            ( biały | niebieski ) & ( biały | niebieski ) & (wygrana | remis | przegrana ) \\
-            \hline
-            \multirow{5}{*}{( default | default )} & ( 2 | 1 ) & ( 6 | 1 | 13 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 3 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 4 ) & ( 1 | 0 | 19 ) \\
-            \cline{2-3}
-             & ( 2 | 5 ) & ( 0 | 0 | 20 ) \\
-            \hline
-            \multirow{5}{*}{( default | tight )} & ( 2 | 1 ) & ( 13 | 6 | 1 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 5 | 10 | 5 ) \\
-            \cline{2-3}
-             & ( 2 | 3 ) & ( 4 | 12 | 4 ) \\
-            \cline{2-3}
-             & ( 2 | 4 ) & ( 3 | 17 | 0 ) \\
-            \cline{2-3}
-             & ( 2 | 5 ) & ( 7 | 9 | 4 ) \\
-            \hline
-            \multirow{5}{*}{( default | enemy side )} & ( 2 | 1 ) & ( 7 | 0 | 13 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 3 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 4 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 5 ) & ( 0 | 0 | 20 ) \\
-            \hline
-            \multirow{5}{*}{( default | hight )} & ( 2 | 1 ) & ( 9 | 1 | 10 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 3 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 4 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 5 ) & ( 0 | 0 | 20 ) \\
-            \hline
-    \end{tabular}
-    \caption{Rezultaty pomiarów. Badany gracz niebieski. Parametry gracza białego: głębokość - 2, heurystyka - domyślna.}
+\begin{table}[h!]
+        \centering
+        \begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+                \hline
+                \multicolumn{5}{|c|}{Wyniki dla zbioru ``Mushroom''} \\
+                \hline
+                 & precision & recall & f1-score & support \\
+                \hline
+                e & 0,67 & 0,85 & 0,75 & 1677 \\
+                \hline
+                p & 0,78 & 0,56 & 0,65 & 1573 \\
+                \hline
+                accuracy & - & - & 0,71 & 3250 \\
+                \hline
+                macro avg & 0,73 & 0,71 & 0,70 & 3250 \\
+                \hline
+                weighted avg & 0,72 & 0,71 & 0,70 & 3250 \\
+                \hline
+        \end{tabular}
+        \caption{Wyniki pomiarów dla zbioru ``Mushroom'' dla liczby atrybutów odpowiadającej liczbie atrybutów zbioru ``Breast cancer'' przy podziale o stosunku 3:2.}
 \end{table}
-Dla domyślnej heurystyki gdy głębokość przeszukiwań niebieskiego wynosiła
-więcej niż 1, gracz niebieski niemal zawsze wygrywał.
 
-Zastosowanie heurystyki ,,tight'' skutkowało zwiększaniem się liczby remisów.
-
-Pozostałe heurystyki dawały podobne rezultaty do domyślnej.
-
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.7\linewidth]{photos/mush_n_attr_3_to_2_r.png}
+        \caption{Macierz pomyłek dla zbioru ``Mushroom'' dla liczby atrybutów odpowiadającej liczbie atrybutów zbioru ``Breast cancer'' przy podziale o stosunku 3:2.}
+\end{figure}
 \clearpage
 
-\begin{table}[htbp!]
-    \centering
-    \begin{tabular}{ |c|c|c|}
-            \hline
-            \multicolumn{3}{|c|}{Wpływ głębokości drzewa przeszukiwań oraz rodzaju funkcji oceny} \\
-            \multicolumn{3}{|c|}{stanu na liczbę wygranych algorytmu. Badany gracz: biały.} \\
-            \hline
-            heurystyka & głębokość & wynik (z perspektywy białego) \\
-            ( biały | niebieski ) & ( biały | niebieski ) & (wygrana | remis | przegrana ) \\
-            \hline
-            \multirow{5}{*}{( default | default )} & ( 1 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 0 | 0 | 20 ) \\
-            \hline
-            \multirow{5}{*}{( tight | default )} & ( 1 | 2 ) & ( 0 | 7 | 13 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 3 | 17 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 4 | 12 | 4 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 0 | 0 | 20 ) \\
-            \hline
-            \multirow{5}{*}{( enemy side | default)} & ( 1 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 1 | 1 | 18 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 1 | 1 | 18 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 0 | 0 | 20 ) \\
-            \hline
-            \multirow{5}{*}{( hight | default )} & ( 1 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 0 | 0 | 20 ) \\
-            \hline
-    \end{tabular}
-    \caption{Rezultaty pomiarów. Badany gracz biały. Parametry graczaj niebieskiego: głębokość - 2, heurystyka - domyślna.}
-\end{table}
+W tym eksperymencie zaobserwowałem największą do tej pory różnicę w wynikach
+testów. W większości przypadków, dokładność algorytmu wynosiła ok. 100\% lub
+ok. 90\%. Dla jednego przypadku jednak, uzyskałem rezultat wynoszący 71\%, co
+znacząco odbiegało od dotychczasowych wyników.
 
-Pomimo tego, że głębokość białego zmieniała się od wartości 1 do 5, podczas gdy
-głębokość niebieskiego pozostawała stała równa 2, dla każdej heurystyki poza
-heurystyką ,,tight'', to niebieski wygrywał większość partii. Przeprowadzenie
-badania dla większej wartości głębokości białego nie było możliwe z uwagi na
-czas potrzebny na wykonanie testów.
+Rozbieżność w wynikach może wynikać z tego, że w niektórych wywołaniach testu
+do zbioru testowanego nie zostały uwzględnione atrybuty ``ważniejsze'' od
+pozostałych. Mniejsza liczba atrybutów zmniejsza możliwość wyboru najlepiej
+dzielącego zbiór atrybutu w danej gałęzi drzewa.
+
+\subsubsection{Zastosowanie rozmiaru zbiorów oraz liczby atrybutów takiej, jaka
+jest w zbiorze ``Breast cancer''}
+W tym eksperymencie niejako zostały połączone dwa podejścia wykonane w
+powyższych punktach.
+
+W tabeli i na obrazku przedstawiono rezultaty jednego z testów.
+
+\begin{table}[h!]
+        \centering
+        \begin{tabular}{ |p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+                \hline
+                \multicolumn{5}{|c|}{Wyniki dla zbioru ``Mushroom''} \\
+                \hline
+                 & precision & recall & f1-score & support \\
+                \hline
+                e & 1,00 & 1,00 & 1,00 & 52 \\
+                \hline
+                p & 1,00 & 1,00 & 1,00 & 62 \\
+                \hline
+                accuracy & - & - & 1,00 & 114 \\
+                \hline
+                macro avg & 1,00 & 1,00 & 1,00 & 114 \\
+                \hline
+                weighted avg & 1,00 & 1,00 & 1,00 & 114 \\
+                \hline
+        \end{tabular}
+        \caption{Wyniki pomiarów dla zbioru ``Mushroom'' dla liczby atrybutów oraz rozmiaru zbioru odpowiadającym liczbie atrybutów i romiarowi zbioru ``Breast cancer'' przy podziale o stosunku 3:2.}
+\end{table}
 
 \clearpage
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.7\linewidth]{photos/mush_n_attr_train_size_test_size.png}
+        \caption{Macierz pomyłek dla zbioru ``Mushroom'' dla liczby atrybutów oraz rozmiaru zbioru odpowiadającym liczbie atrybutów i romiarowi zbioru ``Breast cancer'' przy podziale o stosunku 3:2.}
+\end{figure}
 
-W związku z powyższym przeprowadzono jeszcze jeden test. W stosunku do
-poprzedniego zmieniła się w nim tylko jedna rzecz: głębokość niebieskiego
-została zmieniona na wartość 1.
+Nie zaobserwowano pogorszenia się wyników względem pierwotnego wyniku.
 
-\begin{table}[htbp!]
-    \centering
-    \begin{tabular}{ |c|c|c|}
-            \hline
-            \multicolumn{3}{|c|}{Wpływ głębokości drzewa przeszukiwań oraz rodzaju funkcji oceny} \\
-            \multicolumn{3}{|c|}{stanu na liczbę wygranych algorytmu. Badany gracz: biały.} \\
-            \hline
-            heurystyka & głębokość & wynik (z perspektywy białego) \\
-            ( biały | niebieski ) & ( biały | niebieski ) & (wygrana | remis | przegrana ) \\
-            \hline
-            \multirow{5}{*}{( default | default )} & ( 1 | 2 ) & ( 9 | 0 | 11 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 7 | 0 | 13 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 9 | 0 | 11 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 9 | 0 | 11 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 11 | 0 | 9 ) \\
-            \hline
-            \multirow{5}{*}{( tight | default )} & ( 1 | 2 ) & ( 0 | 5 | 15 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 0 | 1 | 19 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 0 | 0 | 20 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 0 | 0 | 20 ) \\
-            \hline
-            \multirow{5}{*}{( enemy side | default )} & ( 1 | 2 ) & ( 10 | 0 | 10 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 14 | 0 | 6 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 8 | 0 | 12 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 16 | 0 | 4 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 9 | 1 | 10 ) \\
-            \hline
-            \multirow{5}{*}{( hight | default )} & ( 1 | 2 ) & ( 10 | 0 | 10 ) \\
-            \cline{2-3}
-             & ( 2 | 2 ) & ( 8 | 0 | 12 ) \\
-            \cline{2-3}
-             & ( 3 | 2 ) & ( 9 | 0 | 11 ) \\
-            \cline{2-3}
-             & ( 4 | 2 ) & ( 6 | 0 | 14 ) \\
-            \cline{2-3}
-             & ( 5 | 2 ) & ( 12 | 1 | 7 ) \\
-            \hline
-    \end{tabular}
-    \caption{Rezultaty pomiarów. Badany gracz biały. Parametry graczaj niebieskiego: głębokość - 1, heurystyka - domyślna.}
-\end{table}
+\subsection{Wpływ poszczególnych atrybutów w zbiorze na wyniki predykcji}
+Wiedząc, że atrybuty mogą mieć wpływ na wyniki testów chciałem sprawdzić, jaki
+wpływ na klasę obiektu ma każdy atrybut. Zostało to przetestowane z użyciem
+klas \textit{RandomForestRegressor} \textit{RandomForestClassifier} z biblioteki
+\textit{sklearn.ensemble}. Wartości atrybutów zostały zamapowane na liczby.
 
-Zmniejszenie wartości głębokości niebieskiego spowodowało, że biały częściej
-wygrywał dla każdej heurystyki innej od ,,tight''. 
+Na obazka zostały przedstawione ``ważności'' poszczególnych atrybutów dla
+określonych zbiorów.
 
-Dla pozostałych heurystyk nie widać wpływu głębokości działania algorytmu na
-rezultaty białego. Niezależnie od przyjętej głębi biały wygrywa około połowę
-partii pomimo tego, że w niektórych przypadkach głebokość jego obliczeń jest
-większa nawet o 4 w porównaniu do niebieskiego gracza.
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[b]{0.6\linewidth}
+		\includegraphics[width=\linewidth]{photos/importances_bre.png}
+		\caption{``Breast cancer''}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.6\linewidth}
+		\includegraphics[width=\linewidth]{photos/importances_mush.png}
+		\caption{``Mushroom''}
+	\end{subfigure}
+        \caption{Wykresy przedstawiające ``ważności'' poszczególnych atrybutów przy klasyfikacji.}
+\end{figure}
+\clearpage
 
+W zbiorze ``Mushroom'' najbardziej znaczącym atrybutem jest \textit{gill-color}.
+Jego ważność została oceniona na 0.35. W zbiorze ``Mushrooms'' duża część
+atrybutów ma znikome znaczenie przy tworzeniu drzewa decyzyjnego. Może to
+sugerować, że decyzja o tym, do jakiej klasy należy dany obiekt jest podejmowana
+znacznie wcześniej, czyli i głebokość drzewa decyzyjnego jest niższa. Świadczy
+to o tym, że istnieją atrybuty które bardzo dobrze rozdzielają zbiór obiektów
+na maksymalnie różne podzbiory za pomocą wyliczania entropii zbiorów.
+
+Dla zbioru ``Mushroom'' 5 atrybutów ma wpływ większy niż 0.05, podczas gdy dla
+zbioru ``Breast cancer'' wszystkie atrybuty miały znaczenie o wartości
+równej co najmniej 0.05.
